@@ -11,11 +11,9 @@
   (cond
     [(empty? lon) false]
     [else (cond
-            [(empty? (rest lon)) false]
-            [else (cond
-                    [(is24? (+ number (first lon) )) true]
-                    [else (have-a-sum-is-24? number (rest lon))])])]))
-                   
+            [(is24? (+ number (first lon) )) true]
+            [else (have-a-sum-is-24? number (rest lon))])]))
+
 (define test-1 (have-a-sum-is-24? 20 (list 2 3)))
 
 (define test-2 (have-a-sum-is-24? 20 (list 2 3 4)))
