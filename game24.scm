@@ -14,6 +14,22 @@
             [(is24? (+ number (first lon) )) true]
             [else (have-a-sum-is-24? number (rest lon))])]))
 
-(define test-1 (have-a-sum-is-24? 20 (list 2 3)))
+(define (is-the-first-number-and-others-equal-to-24? lon)
+  (cond
+    [(empty? lon) false]
+    [else (have-a-sum-is-24? (first lon) (rest lon))]))
 
-(define test-2 (have-a-sum-is-24? 20 (list 2 3 4)))
+(define (is-their-a-pair-their-sum-equal-to-24? lon)
+  (cond
+    [(empty? lon) false]
+    [else
+     (cond
+       [(is-the-first-number-and-others-equal-to-24? lon) true]
+       [else (is-their-a-pair-their-sum-equal-to-24? (rest lon))])]))
+
+
+(define test-1 (is-their-a-pair-their-sum-equal-to-24? (list 2 8 5 3)))
+(define test-2 (is-their-a-pair-their-sum-equal-to-24? (list 3 3 20 4)))
+(define test-3 (is-their-a-pair-their-sum-equal-to-24? (list)))
+
+
