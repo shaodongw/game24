@@ -7,27 +7,29 @@
            (cond
              [(empty? lon) empty]
              [else
-              (append (first-others lon empty) 
-                      (first-others (rest lon) (append lon-leader (cons (first lon) empty))))])))
+              (append
+               (first-others lon lon-leader) 
+               (first-others (rest lon) (append lon-leader (cons (first lon) empty))))])))
     (each-other0 lon empty)))
-
-
-(define (one-others number lon lon-leader)
-  (cond
-    [(empty? lon) empty]
-    [else
-     (cons
-      (append lon-leader 
-              (cons (+ number (first lon)) (rest lon)))
-      (one-others number (rest lon) (append lon-leader (cons (first lon) empty))))]))
 
 
 (define (first-others lon lon-leader)
   (cond
     [(empty? lon) empty]
     [else
-     (one-others (first lon) (rest lon) lon-leader)]))
+     (append
+      (one-others (first lon) lon lon-leader)
+      (first-others (rest lon) (append lon-leader (cons (first lon) empty))))]))
 
+(define (one-others number lon lon-leader)
+  (cond
+    [(empty? lon) empty]
+    [else
+     (cons
+      (append
+       lon-leader
+       (cons (+ number (first lon)) (rest lon)))
+      (one-others number (rest lon) (append lon-leader (cons (first lon) empty))))]))
 
 (define test5 (each-other (list 2 8 5 9)))
 (define test1 (each-other (list 2 8 5)))
@@ -35,4 +37,4 @@
 (define test3 (each-other (list 79)))
 (define test4 (each-other empty))
 
-
+test5
