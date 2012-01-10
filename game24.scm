@@ -2,29 +2,31 @@
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname game24) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
 (define (each-other lon)
-  (cond
-    [(empty? lon) empty]
-    [else
-     (append (first-others lon) 
-             (first-others (rest lon)))]))
-
-(define (one-others number lon)
   (local(
-         (define (one-others-local number lon lon-leader)
+         (define (each-other0 lon lon-leader)
            (cond
              [(empty? lon) empty]
              [else
-              (cons
-               (append lon-leader 
-                       (cons (+ number (first lon)) (rest lon)))
-               (one-others-local number (rest lon) (append lon-leader (cons (first lon) empty))))])))
-    (one-others-local number lon empty)))
+              (append (first-others lon empty) 
+                      (first-others (rest lon) (append lon-leader (cons (first lon) empty))))])))
+    (each-other0 lon empty)))
 
-(define (first-others lon)
+
+(define (one-others number lon lon-leader)
   (cond
     [(empty? lon) empty]
     [else
-     (one-others (first lon) (rest lon))]))
+     (cons
+      (append lon-leader 
+              (cons (+ number (first lon)) (rest lon)))
+      (one-others number (rest lon) (append lon-leader (cons (first lon) empty))))]))
+
+
+(define (first-others lon lon-leader)
+  (cond
+    [(empty? lon) empty]
+    [else
+     (one-others (first lon) (rest lon) lon-leader)]))
 
 
 (define test5 (each-other (list 2 8 5 9)))
