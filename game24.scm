@@ -4,16 +4,22 @@
 (define (each-other lon)
   (cond
     [(empty? lon) empty]
-    [else (one-others (first lon) (rest lon))]))
+    [else (one-others lon)]))
 
-(define (one-others number lon)
-(local(
-  (define (one-others-local number lon lon-leader)
-    (cond
-      [(empty? lon) empty]
-      [else (append lon-leader (cons (+ number (first lon)) (one-others number (rest lon))))])))
-  (one-others-local number lon empty)))
+(define (one-others lon)
+  (local(
+         (define (one-others-local lon lon-leader)
+           (cond
+             [(empty? lon) empty]
+             [(empty? (rest lon)) empty]
+             [else
+              (cons (append lon-leader 
+                            (cons (+ (first lon) (first (rest lon)))
+                                  (rest (rest lon))))
+                    (one-others-local (rest lon) (cons (first lon) lon-leader)))])))
+    (one-others-local lon empty)))
 
+(define test5 (each-other (list 2 8 5 9)))
 (define test1 (each-other (list 2 8 5)))
 (define test2 (each-other (list 2 8)))
 (define test3 (each-other (list 79)))
