@@ -7,9 +7,7 @@
            (cond
              [(empty? lon) empty]
              [else
-              (append
-               (first-others lon lon-leader) 
-               (first-others (rest lon) (append lon-leader (cons (first lon) empty))))])))
+               (first-others lon lon-leader)])))
     (each-other0 lon empty)))
 
 
