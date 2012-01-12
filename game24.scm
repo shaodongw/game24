@@ -1,8 +1,8 @@
-;; The first three lines of this file were inserted by DrScheme. They record metadata
+;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-advanced-reader.ss" "lang")((modname game24) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f ())))
 ;; Data Definition
-(define-struc node (lon path))
+(define-struct node (lon path))
 ;; a node: (make-node lon path)
 ;; where lon is a list of numbers, path is a series of number and operation symbol
 
@@ -23,7 +23,8 @@
 
 (define (reduce node)
   (cond
-    [(empty? node-lon) (make-node epmty node-path) ]
+    [(empty? node) empty]
+    [(empty? node-lon) (make-node empty node-path) ]
     [(empty? (rest node-lon))
      (cond
        [(= 24 (first node-lon)) node]
@@ -59,11 +60,6 @@
        (cons (+ number (first lon)) (rest lon)))
       (one-others number (rest lon) (append lon-leader (cons (first lon) empty))))]))
 
-(define test6 (each-other (list 2 8 5 9 12)))
-(define test5 (each-other (list 2 8 5 9)))
-(define test1 (each-other (list 2 8 5)))
-(define test2 (each-other (list 2 8)))
-(define test3 (each-other (list 79)))
-(define test4 (each-other empty))
+(define test (solve (list (make-node (list 3 21) empty))))
 
-test5
+test
