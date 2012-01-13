@@ -23,16 +23,17 @@
 
 (define (reduce node)
   (cond
-    [(empty? node) empty]
     [(empty? node-lon) (make-node empty node-path) ]
-    [(empty? (rest node-lon))
-     (cond
-       [(= 24 (first node-lon)) node]
-       [else empty])]
     [else
-     (each-other node)]))
+     (cond
+       [(empty? (rest node-lon)) ; leaf node
+        (cond
+          [(= 24 (first node-lon)) node]
+          [else empty])]
+       [else (each-other node)])]))
 
-(define (each-other lon)
+
+(define (each-other lon) ;; to be revolved
   (local(
          (define (each-other0 lon lon-leader)
            (cond
