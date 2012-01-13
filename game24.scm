@@ -64,10 +64,8 @@
       (one-others number (make-node (rest (node-lon node)) path) (append leader (cons (first (node-lon node)) empty)) path))]))
 
 
-;(define test (list (make-node (list 3 21) empty)))
-;(define test (one-others 2 (make-node (list 2 8 5 9) empty) empty empty))
-;(define test (one-others 2 (make-node (list 7 5 9) empty) empty empty))
-(define test (each-other (make-node (list 2 7 5 9) empty)))
-;(define test (solve (list (make-node (list 3 21) empty))))
+;(define test (each-other (make-node (list 2 7 5 9) empty)))
+(define test (reduce (make-node (list 5 3 9) empty)))
+(define test2 (solve (list (make-node (list 4 11 1 8) empty))))
 
 test
