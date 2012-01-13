@@ -24,13 +24,13 @@
 
 (define (reduce node)
   (cond
-    [(empty? (node-lon node)) (make-node empty node-path) ]
+    [(empty? (node-lon node)) (make-node empty (node-path node)) ]
     [else
      (cond
        [(empty? (rest (node-lon node)))
         (cond
           [(= 24 (first (node-lon node))) node]
-          [else empty])]
+          [else (make-node empty empty)])]
        [else (each-other node)])]))
 
 
@@ -41,7 +41,7 @@
              [(empty? (node-lon node)) empty-node]
              [else
               (first-others node leader path)])))
-    (each-other0 node empty empty)))
+    (each-other0 node empty (node-path node))))
 
 (define (first-others node leader path)
   (cond
@@ -65,7 +65,7 @@
 
 
 ;(define test (each-other (make-node (list 2 7 5 9) empty)))
-(define test (reduce (make-node (list 5 3 9) empty)))
-(define test2 (solve (list (make-node (list 4 11 1 8) empty))))
+;(define test (reduce (make-node (list 5 3 9) (list '+ 88 99))))
+;(define test2 (solve (list (make-node (list 4 11 1 8) empty))))
 
 test
