@@ -48,8 +48,8 @@
     [(empty? (node-lon node)) empty]
     [else
      (append
-      (one-others (first (node-lon node)) (rest (node-lon node)) leader)
-      (first-others (rest (node-lon node)) (append leader (cons (first (node-lon node)) empty))))]))
+      (one-others (first (node-lon node)) (make-node (rest (node-lon node)) path)  leader path)
+      (first-others (make-node (rest (node-lon node)) path) (append leader (cons (first (node-lon node)) empty)) path))]))
 
 (define (one-others number node leader path)
   (cond
@@ -66,7 +66,8 @@
 
 ;(define test (list (make-node (list 3 21) empty)))
 ;(define test (one-others 2 (make-node (list 2 8 5 9) empty) empty empty))
-(define test (one-others 2 (make-node (list 5 9) empty) empty empty))
+;(define test (one-others 2 (make-node (list 7 5 9) empty) empty empty))
+(define test (each-other (make-node (list 2 7 5 9) empty)))
 ;(define test (solve (list (make-node (list 3 21) empty))))
 
 test
