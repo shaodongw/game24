@@ -2,7 +2,7 @@
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-advanced-reader.ss" "lang")((modname game24) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f ())))
 ;; Data Definition
-(define-struct node (lon path))
+(define-struct node (lon empty) path))
 (define empty-node (make-node empty empty))
 ;; a node: (make-node lon path)
 ;; where lon is a list of numbers, path is a series of number and operation symbol
@@ -56,12 +56,20 @@
     [(empty? node-lon) empty]
     [else
      (cons
-      (append
-       leader
-       (cons (+ number (first node-lon)) (rest node-lon)))
-      (one-others number (rest node-lon) (append leader (cons (first node-lon) empty))))]))
+      (make-node (append
+                  leader
+                  (cons (+ number (first node-lon))
+                        (rest node-lon)))
+                 (cons '+ (cons number (cons (first node-lon) path))))
+      (one-others number (make-node (rest node-lon) path) (append leader (cons (first node-lon) empty)) path))]))
 
-(define test (list (make-node (list 3 21) empty)))
+(define (fst number node leader path)
+  node-lon)
+  ;;(+ number (first node-lon)))
+
+;(define test (list (make-node (list 3 21) empty)))
+(define test (fst 2 (make-node (list 2 8 5 9) empty) empty empty))
+;(define test (one-others 2 (make-node (list 2 8 5 9) empty) empty empty))
 ;(define test (solve (list (make-node (list 3 21) empty))))
 
 test
