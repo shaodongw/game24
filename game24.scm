@@ -1,8 +1,9 @@
-;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; The first three lines of this file were inserted by DrScheme. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-advanced-reader.ss" "lang")((modname game24) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f ())))
 ;; Data Definition
 (define-struct node (lon path))
+(define empty-node (make-node empty empty))
 ;; a node: (make-node lon path)
 ;; where lon is a list of numbers, path is a series of number and operation symbol
 
@@ -26,41 +27,41 @@
     [(empty? node-lon) (make-node empty node-path) ]
     [else
      (cond
-       [(empty? (rest node-lon)) ; leaf node
+       [(empty? (rest node-lon))
         (cond
           [(= 24 (first node-lon)) node]
           [else empty])]
        [else (each-other node)])]))
 
 
-(define (each-other lon) ;; to be revolved
+(define (each-other node)
   (local(
-         (define (each-other0 lon lon-leader)
+         (define (each-other0 node leader path)
            (cond
-             [(empty? lon) empty]
+             [(empty? node-lon) empty-node]
              [else
-              (first-others lon lon-leader)])))
-    (each-other0 lon empty)))
+              (first-others node leader path)])))
+    (each-other0 node empty empty)))
 
-
-(define (first-others lon lon-leader)
+(define (first-others node leader path)
   (cond
-    [(empty? lon) empty]
+    [(empty? node-lon) empty]
     [else
      (append
-      (one-others (first lon) (rest lon) lon-leader)
-      (first-others (rest lon) (append lon-leader (cons (first lon) empty))))]))
+      (one-others (first node-lon) (rest node-lon) leader)
+      (first-others (rest node-lon) (append leader (cons (first node-lon) empty))))]))
 
-(define (one-others number lon lon-leader)
+(define (one-others number node leader path)
   (cond
-    [(empty? lon) empty]
+    [(empty? node-lon) empty]
     [else
      (cons
       (append
-       lon-leader
-       (cons (+ number (first lon)) (rest lon)))
-      (one-others number (rest lon) (append lon-leader (cons (first lon) empty))))]))
+       leader
+       (cons (+ number (first node-lon)) (rest node-lon)))
+      (one-others number (rest node-lon) (append leader (cons (first node-lon) empty))))]))
 
-(define test (solve (list (make-node (list 3 21) empty))))
+(define test (list (make-node (list 3 21) empty)))
+;(define test (solve (list (make-node (list 3 21) empty))))
 
 test
