@@ -1,4 +1,4 @@
-;; The first three lines of this file were inserted by DrScheme. They record metadata
+;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-advanced-reader.ss" "lang")((modname game24) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f ())))
 ;; Data Definition
@@ -18,20 +18,22 @@
   (cond
     [(empty? lnode) empty]
     [else
-     (cons
-      (reduce (first lnode))
+     (cond
+       [(is-what)
+       [(is-list? (reduce (first lnode))
       (solve (rest lnode)))]))
 
 (define (reduce node)
   (cond
-    [(empty? (node-lon node)) (make-node empty (node-path node)) ]
-    [else
+    [(is-leaf? node)
      (cond
-       [(empty? (rest (node-lon node)))
-        (cond
-          [(= 24 (first (node-lon node))) node]
-          [else (make-node empty empty)])]
-       [else (each-other node)])]))
+       [(= 24 (first (node-lon node))) node]
+       [else empty])]
+    [else
+     (each-other node)]))
+     
+(define (is-leaf? node)
+  (empty? (rest (node-lon node))))
 
 
 (define (each-other node)
@@ -66,6 +68,7 @@
 
 ;(define test (each-other (make-node (list 2 7 5 9) empty)))
 ;(define test (reduce (make-node (list 5 3 9) (list '+ 88 99))))
-;(define test2 (solve (list (make-node (list 4 11 1 8) empty))))
+(define test (solve (list (make-node (list 4 3 8) empty))))
+;(define test (solution (make-node (list 4 3 8) empty)))
 
 test
