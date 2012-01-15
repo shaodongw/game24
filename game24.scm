@@ -1,4 +1,4 @@
-;; The first three lines of this file were inserted by DrScheme. They record metadata
+;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-advanced-reader.ss" "lang")((modname game24) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f ())))
 ;; Data Definition
@@ -82,12 +82,20 @@
 
 (define (operate op number1 number2)
   (make-merge (op number1 number2) (list op number1 number2)))
-  
 
+(define (four-op nu1 nu2)
+  (list
+   (operate + nu1 nu2)
+   (operate - nu1 nu2)
+   (operate - nu2 nu1)
+   (operate * nu1 nu2)
+   (operate / nu1 nu2)
+   (operate / nu2 nu1)))
+   
 
 ;(define test (l-reduce (list (make-node (list 5 3 9) (list '+ 88 99)) (make-node (list 4 1 6) (list '+ 66 77)) )))
 ;(define test (l-reduce (list (make-node (list 5 3 4 9) (list '+ 88 99)) )))
 
-(define test (operate + 3 5))
+(define test (four-op 3 5))
 
 test
