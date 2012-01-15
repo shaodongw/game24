@@ -78,8 +78,16 @@
       (one-others number (make-node (rest (node-lon node)) path) (append leader (cons (first (node-lon node)) empty)) path))]))
 
 
-;(define test (l-reduce (list (make-node (list 5 3 9) (list '+ 88 99)) (make-node (list 4 1 6) (list '+ 66 77)) )))
+(define-struct merge (result expression))
 
-(define test (l-reduce (list (make-node (list 5 3 4 9) (list '+ 88 99)) )))
+(define (operate op number1 number2)
+  (make-merge (op number1 number2) (list op number1 number2)))
+  
+
+
+;(define test (l-reduce (list (make-node (list 5 3 9) (list '+ 88 99)) (make-node (list 4 1 6) (list '+ 66 77)) )))
+;(define test (l-reduce (list (make-node (list 5 3 4 9) (list '+ 88 99)) )))
+
+(define test (operate + 3 5))
 
 test
