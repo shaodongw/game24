@@ -3,9 +3,14 @@
 #reader(lib "htdp-advanced-reader.ss" "lang")((modname game24) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f ())))
 ;; Data Definition
 (define-struct node (lon path))
-(define empty-node (make-node empty empty))
 ;; a node: (make-node lon path)
 ;; where lon is a list of numbers, path is a series of number and operation symbol
+
+(define (go lnode)
+  (cond
+    [(is-leaf? (first lnode)) lnode]
+    [(empty? (first lnode)) lnode]
+    [else (go lnode)]))
 
 ;; solve: list of node -> list of node
 ;; At first the input list of node only has one node - root node.
@@ -16,31 +21,30 @@
 
 (define (solve lnode)
   (cond
-    [(empty? lnode) empty]
-    [else
-     (cond
-       [(is-what)
-       [(is-list? (reduce (first lnode))
-      (solve (rest lnode)))]))
+    [(cons? lnode)
+     (append (reduce (first lnode)) (solve (rest lnode)))]
+    [else empty]))
 
-(define (reduce node)
-  (cond
-    [(is-leaf? node)
-     (cond
-       [(= 24 (first (node-lon node))) node]
-       [else empty])]
-    [else
-     (each-other node)]))
-     
+(define (is-solu? node)
+  (and
+   (is-leaf? node)
+   (= 24 (first (node-lon node)))))
+
 (define (is-leaf? node)
   (empty? (rest (node-lon node))))
 
+(define (reduce node)
+  (cond
+    [(empty? node) empty]
+    [(is-solu? node) node]
+    [(is-leaf? node) empty]
+    [else (each-other node)]))
 
 (define (each-other node)
   (local(
          (define (each-other0 node leader path)
            (cond
-             [(empty? (node-lon node)) empty-node]
+             [(empty? (node-lon node)) empty]
              [else
               (first-others node leader path)])))
     (each-other0 node empty (node-path node))))
@@ -67,8 +71,13 @@
 
 
 ;(define test (each-other (make-node (list 2 7 5 9) empty)))
-;(define test (reduce (make-node (list 5 3 9) (list '+ 88 99))))
-(define test (solve (list (make-node (list 4 3 8) empty))))
+(define test1 (reduce (make-node (list 5 3 9) (list '+ 88 99))))
+(define test2 (reduce (make-node (list 5 3) (list '+ 88 99))))
+(define test3 (reduce (make-node (list 5) (list '+ 88 99))))
+(define test4 (reduce (make-node (list 24) (list '+ 88 99))))
+(define test5 (reduce empty))
+(define test (solve (list (make-node (list 4 7 6 8) empty))))
+(define gogo (go (list (make-node (list 7 6 8) empty))))
 ;(define test (solution (make-node (list 4 3 8) empty)))
 
-test
+gogo
