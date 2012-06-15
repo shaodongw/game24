@@ -1,11 +1,12 @@
-;; The first three lines of this file were inserted by DrScheme. They record metadata
+;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-advanced-reader.ss" "lang")((modname game24) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f ())))
-(define (resolutions result lon)
+(define (resolutions lon result) 
   (cond
     [(empty? lon) empty]
     [(and (empty? (rest lon)) (= result (first lon))) result]
-    
+    [else (cons '+ (cons (first lon) (resolutions (rest lon) (- result (first lon)))))]))
+
 
 ;; Data Definition
 (define-struct node (lon path))
@@ -102,6 +103,6 @@
 ;(define test (l-reduce (list (make-node (list 5 3 9) (list '+ 88 99)) (make-node (list 4 1 6) (list '+ 66 77)) )))
 ;(define test (l-reduce (list (make-node (list 5 3 4 9) (list '+ 88 99)) )))
 
-(define test (four-op 3 5))
+(define test (resolutions (list 2 3 10 9) 24))
 
 test
