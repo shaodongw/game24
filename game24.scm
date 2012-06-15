@@ -4,8 +4,10 @@
 (define (resolutions lon result) 
   (cond
     [(empty? lon) empty]
-    [(and (empty? (rest lon)) (= result (first lon))) result]
+    [(and (empty? (rest lon)) (= result (first lon))) (cons result empty)]
     [else (cons '+ (cons (first lon) (resolutions (rest lon) (- result (first lon)))))]))
+
+(define test (resolutions (list 2 3 10 8) 24))
 
 
 ;; Data Definition
@@ -103,6 +105,5 @@
 ;(define test (l-reduce (list (make-node (list 5 3 9) (list '+ 88 99)) (make-node (list 4 1 6) (list '+ 66 77)) )))
 ;(define test (l-reduce (list (make-node (list 5 3 4 9) (list '+ 88 99)) )))
 
-(define test (resolutions (list 2 3 10 9) 24))
 
 test
