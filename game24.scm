@@ -18,8 +18,9 @@
      
 
 
-(define test (resolution (list 2 3 10 9) 24))
-
+(define test1 (resolution (list 2 3 10 9) 24))
+(define test2 (resolution (list 2 3 10 8) 24))
+(define test3 (resolution (list 2 2 10 10) 24))
 
 ;; Data Definition
 (define-struct node (lon path))
@@ -117,4 +118,6 @@
 ;(define test (l-reduce (list (make-node (list 5 3 4 9) (list '+ 88 99)) )))
 
 
-test
+test1
+test2
+test3
