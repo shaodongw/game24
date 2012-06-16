@@ -1,20 +1,24 @@
-;; The first three lines of this file were inserted by DrScheme. They record metadata
+;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-advanced-reader.ss" "lang")((modname game24) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f ())))
 (define (resolution lon expect) 
   (cond
     [(empty? lon) empty]
-    [(and (empty? (rest lon)) (= expect (first lon))) (cons expect empty)]
-    [(and (empty? (rest lon)) (not (= expect (first lon)))) empty]
+    [(empty? (rest lon))    ; only one number
+     (cond
+       [(= expect (first lon)) expect]
+       [else empty])]
     [else (join (list '+ (first lon)) (resolution (rest lon) (- expect (first lon))))]))
 
-(defind (join l lol)
+(define (join l lol)
   (cond
     [(empty? lol) empty]
-    [(is-number? lol) ...
+    [(number? lol) (append l (list lol))]
+    [(list? lol) (append l lol)]))
+     
 
 
-(define test (resolution (list 2 3 10 8) 24))
+(define test (resolution (list 2 3 10 9) 24))
 
 
 ;; Data Definition
