@@ -16,13 +16,55 @@
       (cons
         (make-poker (first lon) empty) (pack (rest lon)))]))
 
-
-
 (define (resolution lopoker) 
   (cond
-    [(empty? lopoker) empty]    ; empty list
+    [(empty? lopoker) empty]        ; empty list
     [else
-      lopoker]))
+      (cond
+        [(empty? (rest lopoker))    ; only one poker card in the list
+         (cond
+           [(= final (poker-number (first lopoker)))    (poker-path (first lopoker))]
+           [else                                        empty])]
+        [else                       ; have not been reduced to one poker card
+          (resolution (reduce lopoker))])]))
+
+(define (reduce lop)
+  (rest lop))
+
+;;(define (reduce node)
+;;  (cond
+;;    [(empty? node) empty]
+;;    [(is-leaf? node) node]
+;;    [else (each-other node)]))
+;;
+;;(define (each-other node)
+;;  (local(
+;;         (define (each-other0 node leader path)
+;;           (cond
+;;             [(empty? (node-lon node)) empty]
+;;             [else
+;;              (first-others node leader path)])))
+;;    (each-other0 node empty (node-path node))))
+;;
+;;(define (first-others node leader path)
+;;  (cond
+;;    [(empty? (node-lon node)) empty]
+;;    [else
+;;     (append
+;;      (one-others (first (node-lon node)) (make-node (rest (node-lon node)) path)  leader path)
+;;      (first-others (make-node (rest (node-lon node)) path) (append leader (cons (first (node-lon node)) empty)) path))]))
+;;
+;;(define (one-others number node leader path)
+;;  (cond
+;;    [(empty? (node-lon node)) empty]
+;;    [else
+;;     (cons
+;;      (make-node (append
+;;                  leader
+;;                  (cons (+ number (first (node-lon node)))
+;;                        (rest (node-lon node))))
+;;                 (cons '+ (cons number (cons (first (node-lon node)) path))))
+;;      (one-others number (make-node (rest (node-lon node)) path) (append leader (cons (first (node-lon node)) empty)) path))]))
 
 
 (define test1 (game24 (list 2 3 10 9)))
@@ -70,40 +112,6 @@
 (define (is-leaf? node)
   (empty? (rest (node-lon node))))
 
-(define (reduce node)
-  (cond
-    [(empty? node) empty]
-    [(is-leaf? node) node]
-    [else (each-other node)]))
-
-(define (each-other node)
-  (local(
-         (define (each-other0 node leader path)
-           (cond
-             [(empty? (node-lon node)) empty]
-             [else
-              (first-others node leader path)])))
-    (each-other0 node empty (node-path node))))
-
-(define (first-others node leader path)
-  (cond
-    [(empty? (node-lon node)) empty]
-    [else
-     (append
-      (one-others (first (node-lon node)) (make-node (rest (node-lon node)) path)  leader path)
-      (first-others (make-node (rest (node-lon node)) path) (append leader (cons (first (node-lon node)) empty)) path))]))
-
-(define (one-others number node leader path)
-  (cond
-    [(empty? (node-lon node)) empty]
-    [else
-     (cons
-      (make-node (append
-                  leader
-                  (cons (+ number (first (node-lon node)))
-                        (rest (node-lon node))))
-                 (cons '+ (cons number (cons (first (node-lon node)) path))))
-      (one-others number (make-node (rest (node-lon node)) path) (append leader (cons (first (node-lon node)) empty)) path))]))
 
 
 (define-struct merge (result expression))
