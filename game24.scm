@@ -87,6 +87,18 @@
 ;;      (one-others (first (node-lon node)) (make-node (rest (node-lon node)) path)  leader path)
 ;;      (first-others (make-node (rest (node-lon node)) path) (append leader (cons (first (node-lon node)) empty)) path))]))
 ;;
+(define (each-other lop)
+  (local(
+         (define (each-other0 lop leader)
+           (cond 
+             [(empty? lop) empty]
+             [(empty? (rest lop)) empty]
+             [(empty? (rest (rest lop))) empty]
+             [else 
+              (append (one-others (first lop) (rest lop) leader)
+                      (one-others (first (rest lop)) (rest (rest lop)) (cons (first lop) leader)))])))
+    (each-other0 lop empty)))
+
 (define (one-others p lop leader)
   (cond
     [(empty? lop) empty]
@@ -99,7 +111,7 @@
                (rest lop)))
       (one-others p (rest lop) (append leader (list (first lop)))))]))
 
-(define testx (one-others (make-poker 5 empty) (pack (list 10 9)) empty))
+(define testx (each-other (pack (list 1 2 3 4))))
 
 (define test1 (game24 (list 2 3 10 9)))
 (define test2 (game24 (list 2 3 10 8)))
