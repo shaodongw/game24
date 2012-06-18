@@ -1,4 +1,4 @@
-;; The first three lines of this file were inserted by DrScheme. They record metadata
+;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-advanced-reader.ss" "lang")((modname game24) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f ())))
 (define final 24)
@@ -7,34 +7,34 @@
   (cond
     [(empty? lon) empty]
     [else
-      (resolution-all (list (pack lon)))]))
+     (resolution-all (list (pack lon)))]))
 
 (define (resolution-all lolopoker)
   (cond
     [(empty? lolopoker)     empty]
     [else
-      (append
-        (resolution-one (first lolopoker))
-        (resolution-all (rest lolopoker)))]))
+     (append
+      (resolution-one (first lolopoker))
+      (resolution-all (rest lolopoker)))]))
 
 (define (pack lon)
   (cond
     [(empty? lon) empty]
     [else
-      (cons
-        (make-poker (first lon) empty) (pack (rest lon)))]))
+     (cons
+      (make-poker (first lon) empty) (pack (rest lon)))]))
 
 (define (resolution-one lopoker) 
   (cond
     [(empty? lopoker) empty]        ; empty list
     [else
-      (cond
-        [(empty? (rest lopoker))    ; only one poker card in the list
-         (cond
-           [(= final (poker-number (first lopoker)))    (poker-path (first lopoker))]
-           [else                                        empty])]
-        [else                       ; have not been reduced to one poker card
-          (resolution-one (reduce lopoker))])]))
+     (cond
+       [(empty? (rest lopoker))    ; only one poker card in the list
+        (cond
+          [(= final (poker-number (first lopoker)))    (poker-path (first lopoker))]
+          [else                                        empty])]
+       [else                       ; have not been reduced to one poker card
+        (resolution-one (reduce lopoker))])]))
 
 (define (reduce lop)
   ; There must be 2 itmes in lop at leaset
@@ -91,13 +91,15 @@
   (cond
     [(empty? lop) empty]
     [else
+     (cons
       (append leader
               (cons
-                (make-poker (+ (poker-number p) (poker-number (first lop)))
-                            (list '+ (poker-number p) (poker-number (first lop))))
-                (rest lop)))]))
+               (make-poker (+ (poker-number p) (poker-number (first lop)))
+                           (list '+ (poker-number p) (poker-number (first lop))))
+               (rest lop)))
+      (one-others p (rest lop) (append leader (list (first lop)))))]))
 
-(define testx (one-others (make-poker 5 empty) (pack (list 3 10 9)) empty))
+(define testx (one-others (make-poker 5 empty) (pack (list 10 9)) empty))
 
 (define test1 (game24 (list 2 3 10 9)))
 (define test2 (game24 (list 2 3 10 8)))
@@ -159,7 +161,7 @@
    (operate * nu1 nu2)
    (operate / nu1 nu2)
    (operate / nu2 nu1)))
-   
+
 
 ;(define test (l-reduce (list (make-node (list 5 3 9) (list '+ 88 99)) (make-node (list 4 1 6) (list '+ 66 77)) )))
 ;(define test (l-reduce (list (make-node (list 5 3 4 9) (list '+ 88 99)) )))
