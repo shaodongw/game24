@@ -7,7 +7,15 @@
   (cond
     [(empty? lon) empty]
     [else
-      (resolution (pack lon))]))
+      (resolution-all (list (pack lon)))]))
+
+(define (resolution-all lolopoker)
+  (cond
+    [(empty? lolopoker)     empty]
+    [else
+      (append
+        (resolution-one (first lolopoker))
+        (resolution-all (rest lolopoker)))]))
 
 (define (pack lon)
   (cond
@@ -16,7 +24,7 @@
       (cons
         (make-poker (first lon) empty) (pack (rest lon)))]))
 
-(define (resolution lopoker) 
+(define (resolution-one lopoker) 
   (cond
     [(empty? lopoker) empty]        ; empty list
     [else
@@ -26,11 +34,36 @@
            [(= final (poker-number (first lopoker)))    (poker-path (first lopoker))]
            [else                                        empty])]
         [else                       ; have not been reduced to one poker card
-          (resolution (reduce lopoker))])]))
+          (resolution-one (reduce lopoker))])]))
 
 (define (reduce lop)
-  (rest lop))
+  ; There must be 2 itmes in lop at leaset
+  empty)
 
+
+;; (define (first-and-others lop)
+;;   (cond
+;;     [(empty? lop)   empty]
+;;     [(empty? (rest lop))        (error "Only one number in list!")]
+;;     [else
+;;       (list
+;;         (cons
+;;           (make-poker (+ (poker-number (first lop)) (poker-number (first(rest lop))))
+;;           (list '+ (poker-number (first lop)) (poker-number (first(rest lop))))))
+;;         (rest (rest lop)))]
+;; 
+;;  
+;;     (cons
+;;       (make-poker (* (poker-number (first lop)) (poker-number (first(rest lop))))
+;;                   (list '* (poker-number (first lop)) (poker-number (first(rest lop)))))
+;;       (rest (rest lop)))))
+;; 
+;; (define (each-others lop)
+;;   (cond
+;;     [(empty? (rest (rest lop))      (first-and-others lop))]
+;;     [else
+;;       (append (first-and-others lop) (each-others (cons (first lop) (rest lop))))]))
+;; 
 ;;(define (reduce node)
 ;;  (cond
 ;;    [(empty? node) empty]
@@ -54,18 +87,17 @@
 ;;      (one-others (first (node-lon node)) (make-node (rest (node-lon node)) path)  leader path)
 ;;      (first-others (make-node (rest (node-lon node)) path) (append leader (cons (first (node-lon node)) empty)) path))]))
 ;;
-;;(define (one-others number node leader path)
-;;  (cond
-;;    [(empty? (node-lon node)) empty]
-;;    [else
-;;     (cons
-;;      (make-node (append
-;;                  leader
-;;                  (cons (+ number (first (node-lon node)))
-;;                        (rest (node-lon node))))
-;;                 (cons '+ (cons number (cons (first (node-lon node)) path))))
-;;      (one-others number (make-node (rest (node-lon node)) path) (append leader (cons (first (node-lon node)) empty)) path))]))
+(define (one-others p lop leader)
+  (cond
+    [(empty? lop) empty]
+    [else
+      (append leader
+              (cons
+                (make-poker (+ (poker-number p) (poker-number (first lop)))
+                            (list '+ (poker-number p) (poker-number (first lop))))
+                (rest lop)))]))
 
+(define testx (one-others (make-poker 5 empty) (pack (list 3 10 9)) empty))
 
 (define test1 (game24 (list 2 3 10 9)))
 (define test2 (game24 (list 2 3 10 8)))
@@ -133,9 +165,12 @@
 ;(define test (l-reduce (list (make-node (list 5 3 4 9) (list '+ 88 99)) )))
 
 
-(display test1)
+;(display test1)
+;(newline)
+;(display test2)
+;(newline)
+;(display test3)
+;(newline)
+(display testx)
 (newline)
-(display test2)
-(newline)
-(display test3)
-(newline)
+
