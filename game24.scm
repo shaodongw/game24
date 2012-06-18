@@ -1,30 +1,33 @@
 ;; The first three lines of this file were inserted by DrScheme. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-advanced-reader.ss" "lang")((modname game24) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f ())))
-(define (resolution lon expect) 
+(define final 24)
+(define-struct poker (number path))
+(define (game24 lon)
   (cond
-    [(empty? lon) empty]    ; empty list
-    [(empty? (rest lon))    ; only one number in the list
-     (cond
-       [(= expect (first lon)) expect]
-       [else empty])]
-    [else                   ; at least two numbers in the list
-     (join
-     ; combine a new list using first number operate others and generate a new number
-     
-     
-     (join (list '+ (first lon)) (resolution (rest lon) (- expect (first lon))))]))
+    [(empty? lon) empty]
+    [else
+      (resolution (pack lon))]))
 
-(define (join l lol)
+(define (pack lon)
   (cond
-    [(empty? lol) empty]
-    [(number? lol) (append l (list lol))]
-    [(list? lol) (append l (list lol))]))
-     
+    [(empty? lon) empty]
+    [else
+      (cons
+        (make-poker (first lon) empty) (pack (rest lon)))]))
 
-(define test1 (resolution (list 2 3 10 9) 24))
-(define test2 (resolution (list 2 3 10 8) 24))
-(define test3 (resolution (list ) 24))
+
+
+(define (resolution lopoker) 
+  (cond
+    [(empty? lopoker) empty]    ; empty list
+    [else
+      lopoker]))
+
+
+(define test1 (game24 (list 2 3 10 9)))
+(define test2 (game24 (list 2 3 10 8)))
+(define test3 (game24 (list )))
 
 ;; Data Definition
 (define-struct node (lon path))
