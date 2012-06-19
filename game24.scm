@@ -24,6 +24,13 @@
      (cons
       (make-poker (first lon) empty) (pack (rest lon)))]))
 
+(define (unpack-num lop)
+  (cond
+    [(empty? lop) empty]
+    [else
+      (cons
+        (poker-number (first lop)) (unpack-num (rest lop)))]))
+
 (define (resolution-one lopoker) 
   (cond
     [(empty? lopoker) empty]        ; empty list
@@ -89,15 +96,22 @@
 ;;
 (define (each-other lop)
   (local(
-         (define (each-other0 lop leader)
+         (define (each-other0 lop leader acc)
            (cond 
              [(empty? lop) empty]
              [(empty? (rest lop)) empty]
-             [(empty? (rest (rest lop))) empty]
+             ;[(empty? (rest (rest lop)))
+             ; (first lop leader)]
              [else 
-              (append (one-others (first lop) (rest lop) leader)
-                      (one-others (first (rest lop)) (rest (rest lop)) (cons (first lop) leader)))])))
-    (each-other0 lop empty)))
+              (append acc (first-others lop leader)
+                      (each-other0 (rest lop) (cons (first lop) leader) acc))])))
+    (each-other0 lop empty empty)))
+
+(define (first-others lop leader)
+  (cond
+    [(empty? lop) leader]
+    [else
+      (one-others (first lop) (rest lop) empty)]))
 
 (define (one-others p lop leader)
   (cond
@@ -185,6 +199,13 @@
 ;(newline)
 ;(display test3)
 ;(newline)
-(display testx)
-(newline)
+(define (show lolop)
+  (cond
+    [(empty? lolop) empty]
+    [else
+      (
+      (display (first lolop))
+      (newline)
+      (show (rest lolop)))]))
 
+(show testx)
