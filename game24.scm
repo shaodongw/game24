@@ -50,8 +50,21 @@
 (define (op-merge-plus p1 p2)
   (make-poker (+ (poker-number p1) (poker-number p2))
               (list '+ (poker-path p1) (poker-path p2))))
-
-
+(define (op-merge-mul p1 p2)
+  (make-poker (* (poker-number p1) (poker-number p2))
+              (list '* (poker-path p1) (poker-path p2))))
+(define (op-merge-sub p1 p2)
+  (make-poker (- (poker-number p1) (poker-number p2))
+              (list '- (poker-path p1) (poker-path p2))))
+(define (op-merge-rev-sub p1 p2)
+  (make-poker (- (poker-number p2) (poker-number p1))
+              (list '- (poker-path p2) (poker-path p1))))
+(define (op-merge-div p1 p2)
+  (make-poker (/ (poker-number p1) (poker-number p2))
+              (list '/ (poker-path p1) (poker-path p2))))
+(define (op-merge-rev-div p1 p2)
+  (make-poker (/ (poker-number p2) (poker-number p1))
+              (list '- (poker-path p2) (poker-path p1))))
 
 (define (each-other lop)
   (local(
@@ -63,7 +76,7 @@
              ; (first lop leader)]
              [else 
               (append (first-others lop leader)
-                      (each-other0 (rest lop) (cons (first lop) leader)))])))
+                      (each-other0 (rest lop) (append leader (list (first lop)))))])))
     (each-other0 lop empty)))
 
 
@@ -72,17 +85,17 @@
     [(empty? lop) empty]
     ;[(empty? (rest lop)) empty]
     [else
-      (add-prefix
-        (one-to-list (first lop) (rest lop))
-        prefix)]))
+     (add-prefix
+      (one-to-list (first lop) (rest lop))
+      prefix)]))
 
 (define (add-prefix lolop prefix)
   (cond
     [(empty? lolop) empty]
     [else
-      (cons
-        (append prefix (first lolop))
-        (add-prefix (rest lolop) prefix))]))
+     (cons
+      (append prefix (first lolop))
+      (add-prefix (rest lolop) prefix))]))
 
 (define (one-to-list p lop)
   (local(
@@ -90,14 +103,36 @@
            (cond
              [(empty? lop) empty]
              [else
-              (cons
+              (append
+              (list
                (append leader
                        (list (op-merge-plus p (first lop)))
-                       (rest lop))
+                       (rest lop)))
+              (list
+               (append leader
+                       (list (op-merge-mul p (first lop)))
+                       (rest lop)))
+              (list
+               (append leader
+                       (list (op-merge-sub p (first lop)))
+                       (rest lop)))
+              (list
+               (append leader
+                       (list (op-merge-rev-sub p (first lop)))
+                       (rest lop)))
+              (list
+               (append leader
+                       (list (op-merge-div p (first lop)))
+                       (rest lop)))
+              (list
+               (append leader
+                       (list (op-merge-rev-div p (first lop)))
+                       (rest lop)))
+              
                (one-to-list0 p (rest lop) (append leader (list (first lop)))))])))
-        (one-to-list0 p lop empty)))
+    (one-to-list0 p lop empty)))
 
-(define testx (each-other (pack (list 1 20 300 4000)) ))
+(define testx (each-other (pack (list 1 2 3 4)) ))
 ;(define testx (first-others (pack (list 1 20 300 4000)) empty))
 ;(define testx (add-prefix (one-to-list (make-poker 10 10) (pack (list 1 2 3 4))) (pack (list 1 2 3))))
 ;(define testx (one-to-list (make-poker 10 10) (pack (list 1 2 3 4))))
@@ -119,11 +154,11 @@
   (cond
     [(empty? lolop) empty]
     [else
-      (begin
+     (begin
        (display (first lolop))
        (newline)
        (show (rest lolop)))]))
-            
+
 ;(display testx)
 (show testx)
 ;testx
