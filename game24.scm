@@ -22,7 +22,7 @@
     [(empty? lon) empty]
     [else
      (cons
-      (make-poker (first lon) empty) (pack (rest lon)))]))
+      (make-poker (first lon) lon) (pack (rest lon)))]))
 
 (define (unpack-num lop)
   (cond
@@ -47,71 +47,34 @@
   ; There must be 2 itmes in lop at leaset
   empty)
 
+(define (op-merge-plus p1 p2)
+  (make-poker (+ (poker-number p1) (poker-number p2))
+              (list '+ (poker-path p1) (poker-path p2))))
 
-;; (define (first-and-others lop)
-;;   (cond
-;;     [(empty? lop)   empty]
-;;     [(empty? (rest lop))        (error "Only one number in list!")]
-;;     [else
-;;       (list
-;;         (cons
-;;           (make-poker (+ (poker-number (first lop)) (poker-number (first(rest lop))))
-;;           (list '+ (poker-number (first lop)) (poker-number (first(rest lop))))))
-;;         (rest (rest lop)))]
-;; 
-;;  
-;;     (cons
-;;       (make-poker (* (poker-number (first lop)) (poker-number (first(rest lop))))
-;;                   (list '* (poker-number (first lop)) (poker-number (first(rest lop)))))
-;;       (rest (rest lop)))))
-;; 
-;; (define (each-others lop)
-;;   (cond
-;;     [(empty? (rest (rest lop))      (first-and-others lop))]
-;;     [else
-;;       (append (first-and-others lop) (each-others (cons (first lop) (rest lop))))]))
-;; 
-;;(define (reduce node)
-;;  (cond
-;;    [(empty? node) empty]
-;;    [(is-leaf? node) node]
-;;    [else (each-other node)]))
-;;
-;;(define (each-other node)
-;;  (local(
-;;         (define (each-other0 node leader path)
-;;           (cond
-;;             [(empty? (node-lon node)) empty]
-;;             [else
-;;              (first-others node leader path)])))
-;;    (each-other0 node empty (node-path node))))
-;;
-;;(define (first-others node leader path)
-;;  (cond
-;;    [(empty? (node-lon node)) empty]
-;;    [else
-;;     (append
-;;      (one-others (first (node-lon node)) (make-node (rest (node-lon node)) path)  leader path)
-;;      (first-others (make-node (rest (node-lon node)) path) (append leader (cons (first (node-lon node)) empty)) path))]))
-;;
-(define (each-other lop)
-  (local(
-         (define (each-other0 lop leader acc)
-           (cond 
-             [(empty? lop) empty]
-             [(empty? (rest lop)) empty]
-             ;[(empty? (rest (rest lop)))
-             ; (first lop leader)]
-             [else 
-              (append acc (first-others lop leader)
-                      (each-other0 (rest lop) (cons (first lop) leader) acc))])))
-    (each-other0 lop empty empty)))
 
-(define (first-others lop leader)
+
+; (define (each-other lop)
+;   (local(
+;          (define (each-other0 lop leader acc)
+;            (cond 
+;              [(empty? lop) empty]
+;              [(empty? (rest lop)) empty]
+;              ;[(empty? (rest (rest lop)))
+;              ; (first lop leader)]
+;              [else 
+;               (append acc (first-others lop leader)
+;                       (each-other0 (rest lop) (cons (first lop) leader) acc))])))
+;     (each-other0 lop empty empty)))
+; 
+(define (first-others0 lop leader)
   (cond
-    [(empty? lop) leader]
+    [(empty? lop) empty]
+    [(empty? (rest lop)) empty]
+    [(empty? (rest (rest lop))) (list (append leader (list (op-merge-plus (first lop) (first (rest lop))))))]
     [else
-      (one-others (first lop) (rest lop) empty)]))
+      (append 
+        (append leader (list (op-merge-plus (first lop) (first (rest lop)))) (rest (rest lop)))
+        (first-others0 (rest lop) (append leader (list (first lop)))))])) 
 
 (define (one-others p lop leader)
   (cond
@@ -125,7 +88,7 @@
                (rest lop)))
       (one-others p (rest lop) (append leader (list (first lop)))))]))
 
-(define testx (each-other (pack (list 1 2 3 4))))
+(define testx (first-others0 (pack (list 1 2 3 4)) empty ))
 
 (define test1 (game24 (list 2 3 10 9)))
 (define test2 (game24 (list 2 3 10 8)))
@@ -208,4 +171,6 @@
       (newline)
       (show (rest lolop)))]))
 
-(show testx)
+(testx)
+;(show testx)
+;(op-merge-plus (make-poker 6 6) (make-poker 7 7))
