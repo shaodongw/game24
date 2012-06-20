@@ -22,7 +22,7 @@
     [(empty? lon) empty]
     [else
      (cons
-      (make-poker (first lon) lon) (pack (rest lon)))]))
+      (make-poker (first lon) (first lon)) (pack (rest lon)))]))
 
 (define (unpack-num lop)
   (cond
@@ -70,7 +70,6 @@
   (cond
     [(empty? lop) empty]
     [(empty? (rest lop)) empty]
-    [(empty? (rest (rest lop))) (list (append leader (list (op-merge-plus (first lop) (first (rest lop))))))]
     [else
      (append 
       (append leader (list (op-merge-plus (first lop) (first (rest lop)))) (rest (rest lop)))
@@ -88,7 +87,7 @@
                (rest lop)))
       (one-others p (rest lop) (append leader (list (first lop)))))]))
 
-(define testx (first-others0 (pack (list 1 2)) empty ))
+(define testx (first-others0 (pack (list 1 2 3)) empty ))
 
 (define test1 (game24 (list 2 3 10 9)))
 (define test2 (game24 (list 2 3 10 8)))
@@ -112,6 +111,6 @@
       (newline)
       (show (rest lolop)))]))
 
-; testx
-(show testx)
+(display testx)
+;(show testx)
 ;(op-merge-plus (make-poker 6 6) (make-poker 7 7))
