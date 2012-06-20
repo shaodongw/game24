@@ -43,8 +43,13 @@
        [else                       ; have not been reduced to one poker card
         (resolution-one (reduce lopoker))])]))
 
+; (define (reduce lop)
+;   ; There must be 2 itmes in lop at leaset
+;   (cond
+;     [(empty? lop) empty]
+;     [else
+;       (each-other lop)]))
 (define (reduce lop)
-  ; There must be 2 itmes in lop at leaset
   empty)
 
 (define (op-merge-plus p1 p2)
