@@ -53,27 +53,36 @@
 
 
 
-; (define (each-other lop)
-;   (local(
-;          (define (each-other0 lop leader acc)
-;            (cond 
-;              [(empty? lop) empty]
-;              [(empty? (rest lop)) empty]
-;              ;[(empty? (rest (rest lop)))
-;              ; (first lop leader)]
-;              [else 
-;               (append acc (first-others lop leader)
-;                       (each-other0 (rest lop) (cons (first lop) leader) acc))])))
-;     (each-other0 lop empty empty)))
-; 
-(define (first-others0 lop leader)
+(define (each-other lop)
+  (local(
+         (define (each-other0 lop leader)
+           (cond 
+             [(empty? lop) empty]
+             ;[(empty? (rest lop)) empty]
+             ;[(empty? (rest (rest lop)))
+             ; (first lop leader)]
+             [else 
+              (append (first-others lop leader)
+                      (each-other0 (rest lop) (cons (first lop) leader)))])))
+    (each-other0 lop empty)))
+
+
+(define (first-others lop prefix)
   (cond
     [(empty? lop) empty]
-    [(empty? (rest lop)) empty]
+    ;[(empty? (rest lop)) empty]
     [else
-     (append 
-      (append leader (list (op-merge-plus (first lop) (first (rest lop)))) (rest (rest lop)))
-      (first-others0 (rest lop) (append leader (list (first lop)))))])) 
+      (add-prefix
+        (one-to-list (first lop) (rest lop))
+        prefix)]))
+
+(define (add-prefix lolop prefix)
+  (cond
+    [(empty? lolop) empty]
+    [else
+      (cons
+        (append prefix (first lolop))
+        (add-prefix (rest lolop) prefix))]))
 
 (define (one-to-list p lop)
   (local(
@@ -88,8 +97,10 @@
                (one-to-list0 p (rest lop) (append leader (list (first lop)))))])))
         (one-to-list0 p lop empty)))
 
-(define testx (one-to-list (make-poker 10 10) (pack (list 1 2 3 4))))
-;(define testx (first-others0 (pack (list 1 2 3)) empty ))
+(define testx (each-other (pack (list 1 20 300 4000)) ))
+;(define testx (first-others (pack (list 1 20 300 4000)) empty))
+;(define testx (add-prefix (one-to-list (make-poker 10 10) (pack (list 1 2 3 4))) (pack (list 1 2 3))))
+;(define testx (one-to-list (make-poker 10 10) (pack (list 1 2 3 4))))
 
 (define test1 (game24 (list 2 3 10 9)))
 (define test2 (game24 (list 2 3 10 8)))
