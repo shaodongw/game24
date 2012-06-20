@@ -75,17 +75,20 @@
       (append leader (list (op-merge-plus (first lop) (first (rest lop)))) (rest (rest lop)))
       (first-others0 (rest lop) (append leader (list (first lop)))))])) 
 
-(define (one-to-list p lop leader)
-  (cond
-    [(empty? lop) empty]
-    [else
-     (append
-      (append leader
-              (list (op-merge-plus p (first lop)))
-              (rest lop))
-      (one-to-list p (rest lop) (append leader (list (first lop)))))]))
+(define (one-to-list p lop)
+  (local(
+         (define (one-to-list0 p lop leader)
+           (cond
+             [(empty? lop) empty]
+             [else
+              (cons
+               (append leader
+                       (list (op-merge-plus p (first lop)))
+                       (rest lop))
+               (one-to-list0 p (rest lop) (append leader (list (first lop)))))])))
+        (one-to-list0 p lop empty)))
 
-(define testx (one-to-list (make-poker 7 7) (pack (list 1 2 3)) empty ))
+(define testx (one-to-list (make-poker 10 10) (pack (list 1 2 3 4))))
 ;(define testx (first-others0 (pack (list 1 2 3)) empty ))
 
 (define test1 (game24 (list 2 3 10 9)))
@@ -105,11 +108,12 @@
   (cond
     [(empty? lolop) empty]
     [else
-     (
-      (display (first lolop))
-      (newline)
-      (show (rest lolop)))]))
-
-(display testx)
-;(show testx)
+      (begin
+       (display (first lolop))
+       (newline)
+       (show (rest lolop)))]))
+            
+;(display testx)
+(show testx)
+;testx
 ;(op-merge-plus (make-poker 6 6) (make-poker 7 7))
