@@ -127,14 +127,14 @@
                (append leader
                        (list (op-merge-rev-sub p (first lop)))
                        (rest lop)))
-              (list
-               (append leader
-                       (list (op-merge-div p (first lop)))
-                       (rest lop)))
-              (list
-               (append leader
-                       (list (op-merge-rev-div p (first lop)))
-                       (rest lop)))
+;              (list
+;               (append leader
+;                       (list (op-merge-div p (first lop)))
+;                       (rest lop)))
+;              (list
+;               (append leader
+;                       (list (op-merge-rev-div p (first lop)))
+;                       (rest lop)))
               
                (one-to-list0 p (rest lop) (append leader (list (first lop)))))])))
     (one-to-list0 p lop empty)))
