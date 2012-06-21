@@ -31,17 +31,19 @@
      (cons
       (poker-number (first lop)) (unpack-num (rest lop)))]))
 
-(define (resolution-one lopoker) 
+(define (resolution-one lop) 
   (cond
-    [(empty? lopoker) empty]        ; empty list
+    [(empty? lop) empty]        ; empty list
+    [(and (empty? (rest lop)) (= final (poker-number (first lop))))
+     ; only one poker(combined) in the list and is right the final number
+     lop]
+    [(and (empty? (rest lop)) (not (= final (poker-number (first lop)))))
+     ; only one poker(combined) in the list but is not the final number
+     empty]
     [else
-     (cond
-       [(empty? (rest lopoker))    ; only one poker card in the list
-        (cond
-          [(= final (poker-number (first lopoker)))    (poker-path (first lopoker))]
-          [else                                        empty])]
-       [else                       ; have not been reduced to one poker card
-        (resolution-one (reduce lopoker))])]))
+      ; there are more poker(combined) in the list, so merge one and the others...
+      (resolution-all (each-other lop))]))
+
 
 ; (define (reduce lop)
 ;   ; There must be 2 itmes in lop at leaset
@@ -137,7 +139,11 @@
                (one-to-list0 p (rest lop) (append leader (list (first lop)))))])))
     (one-to-list0 p lop empty)))
 
-(define testx (each-other (pack (list 1 2 3 4)) ))
+(define testx (game24 (list 1 2 3 4)))
+;(define testx (resolution-all (list (pack (list 1 2 3 4)))))
+;(define testx (resolution-one (list (make-poker 25 25) )))
+;(define testx (resolution-one (list (make-poker 10 10) (make-poker 14 14))))
+;(define testx (each-other (pack (list 1 2 3 4)) ))
 ;(define testx (first-others (pack (list 1 20 300 4000)) empty))
 ;(define testx (add-prefix (one-to-list (make-poker 10 10) (pack (list 1 2 3 4))) (pack (list 1 2 3))))
 ;(define testx (one-to-list (make-poker 10 10) (pack (list 1 2 3 4))))
