@@ -1,6 +1,5 @@
-;; The first three lines of this file were inserted by DrRacket. They record metadata
-;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-advanced-reader.ss" "lang")((modname game24) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f ())))
+":";exec mzscheme $0 "$@"
 (define final 24)
 (define-struct poker (number path))
 (define (game24 lon)
@@ -145,7 +144,11 @@
                (one-to-list0 p (rest lop) (append leader (list (first lop)))))])))
     (one-to-list0 p lop empty)))
 
-(define testx (game24 (list 1 5 5 5)))
+;(define testx (game24 (list 1 5 5 5)))
+;(define testx (game24 (list 4 4 10 10)))
+(define testx (game24 (list 3 3 8 8)))
+;(define testx (game24 (list 1 2 3 4)))
+;(define testx (game24 (list 1 1 1 4)))
 ;(define testx (resolution-all (list (pack (list 1 2 3 4)))))
 ;(define testx (resolution-one (list (make-poker 25 25) )))
 ;(define testx (resolution-one (list (make-poker 10 10) (make-poker 14 14))))
